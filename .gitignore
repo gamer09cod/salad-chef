@@ -2,13 +2,13 @@
 #
 # Get latest from https://github.com/github/gitignore/blob/master/Unity.gitignore
 #
-/[Ll]ibrary/
-/[Tt]emp/
-/[Oo]bj/
-/[Bb]uild/
-/[Bb]uilds/
-/[Ll]ogs/
-/[Mm]emoryCaptures/
+/SaladChef/[Ll]ibrary/
+/SaladChef/[Tt]emp/
+/SaladChef/[Oo]bj/
+/SaladChef/[Bb]uild/
+/SaladChef/[Bb]uilds/
+/SaladChef/[Ll]ogs/
+/SaladChef/[Mm]emoryCaptures/
 
 # Asset meta data should only be ignored when the corresponding asset is also ignored
 !/[Aa]ssets/**/*.meta
