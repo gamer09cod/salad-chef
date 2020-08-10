@@ -113,7 +113,7 @@ public class GameManager : MonoBehaviour
 
     public void ProcessOrder(int sum, Player player)
     {
-        CustomerOrder order = custOrders.Find(o => o.requiredSum == sum);//Check is order exists.
+        CustomerOrder order = custOrders.Find(o => o.requiredSum == sum);//Check if order exists.
 
         if(order != null)
         {

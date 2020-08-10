@@ -108,14 +108,17 @@ public class Player : Timer, IPlayerMechanics
 
     IEnumerator Chopping(Vegetable v)
     {
-        playerMovement.canMove = false;
+        playerMovement.StopPlayer();
         playerUI.ShowStatusBar(v.chopTime, v.name);
 
         yield return new WaitForSeconds(v.chopTime);//Wait for vegetable to be chopped.
 
         RemoveChoppedVegetableFromBag();
-        GameManager.Instance.ProcessOrder(orderSum, this);
         playerMovement.canMove = true;
+
+        if (choppedVegetables.Length == GameConfig.MAX_VEGGIES_PER_ORDER)
+            GameManager.Instance.ProcessOrder(orderSum, this);
+
         yield return null;
     }
 
