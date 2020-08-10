@@ -6,6 +6,9 @@ public class Player2Movement : Movement
 {
     public override void Update()
     {
+        if (!canMove)
+            return;
+
         HandleMovement();
         Animate();
     }
