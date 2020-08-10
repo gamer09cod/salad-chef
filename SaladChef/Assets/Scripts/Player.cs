@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-[RequireComponent(typeof(PlayerMovement))]
+[RequireComponent(typeof(Movement))]
 [RequireComponent(typeof(PlayerUI))]
 public class Player : Timer, IPlayerMechanics
 {
@@ -18,7 +18,7 @@ public class Player : Timer, IPlayerMechanics
     public PlayerUI playerUI;
 
     //Player Movement
-    private PlayerMovement playerMovement;
+    private Movement playerMovement;
 
     private string vegetablesInBag = "";
     private string choppedVegetables = "";
@@ -32,7 +32,7 @@ public class Player : Timer, IPlayerMechanics
 
     private void Start()
     {
-        playerMovement = GetComponent<PlayerMovement>();
+        playerMovement = GetComponent<Movement>();
         OnPlayerTimeOver += OnTimerOver;
         InitPlayer();
     }
@@ -53,21 +53,17 @@ public class Player : Timer, IPlayerMechanics
     private void OnTriggerEnter2D(Collider2D other)
     {
         //Player1 chopping board
-        if (other.gameObject.CompareTag(GameConfig.CHOPPING_BOARD_1) && playerID == 1)
+        if ((other.gameObject.CompareTag(GameConfig.CHOPPING_BOARD_1) && playerID == 1) ||
+            (other.gameObject.CompareTag(GameConfig.CHOPPING_BOARD_2) && playerID == 2))
         {
             ChopVegetable();
         }
 
         //Player1 plate
-        if (other.gameObject.CompareTag(GameConfig.PLATE_1) && playerID == 1)
+        if ((other.gameObject.CompareTag(GameConfig.PLATE_1) && playerID == 1) ||
+            (other.gameObject.CompareTag(GameConfig.PLATE_2) && playerID == 2))
         {
             ExecutePlateProcess();
-        }
-
-        //Player2 Plate
-        if (other.gameObject.CompareTag(GameConfig.PLATE_2) && playerID == 2)
-        {
-
         }
 
         if (carryingVegetables.Count == GameConfig.MAX_CARRYING_CAPACITY)//Limit player to carry only two items at once.

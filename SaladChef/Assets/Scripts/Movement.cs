@@ -4,12 +4,12 @@ using UnityEngine;
 /// <summary>
 /// Abstract Class to control the player and its movement.
 /// </summary>
-public class PlayerMovement : MonoBehaviour
+public class Movement : MonoBehaviour
 {
     public float moveSpeed = 5f;
+    public Vector2 movement;
 
     private Rigidbody2D rigidBody;
-    private Vector2 movement;
     private bool canMove = true;
 
     public bool CanMove { set { canMove = value; } }
@@ -29,14 +29,19 @@ public class PlayerMovement : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
-    private void Update()
+    public virtual void Update()
     {
         if (!canMove)
             return;
-        
+
         movement.x = Input.GetAxisRaw("Horizontal");
         movement.y = Input.GetAxisRaw("Vertical");
 
+        Animate();
+    }
+
+    protected void Animate()
+    {
         animator.SetFloat(Horizontal, movement.x);
         animator.SetFloat(Vertical, movement.y);
         animator.SetFloat(Speed, movement.sqrMagnitude);
