@@ -45,4 +45,13 @@ public class PlayerUI : MonoBehaviour
     {
         vegetableOnPlate.text = items;
     }
+
+    public void Reset()
+    {
+        score.text = "";
+        time.text = "";
+        bag.text = "";
+        choppedVegetables.text = "";
+        vegetableOnPlate.text = "";
+    }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 /// <summary>
-/// Class to control the player and its movement.
+/// Abstract Class to control the player and its movement.
 /// </summary>
 public class PlayerMovement : MonoBehaviour
 {

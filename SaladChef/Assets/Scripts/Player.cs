@@ -217,6 +217,8 @@ public class Player : Timer, IPlayerMechanics
         vegetablesOnPlate = "";
         isChopping = false;
         orderSum = 0;
+
+        playerUI.Reset();
     }
 
     void OnDisable()

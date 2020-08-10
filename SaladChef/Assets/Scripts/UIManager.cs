@@ -58,7 +58,8 @@ public class UIManager : MonoBehaviour
     {
         foreach (OrderUIItem item in orderItems)
         {
-            Destroy(item.gameObject);
+            if(item != null)
+                Destroy(item.gameObject);
         }
 
         orderItems.Clear();
