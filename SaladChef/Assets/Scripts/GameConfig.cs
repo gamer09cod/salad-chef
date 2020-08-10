@@ -26,4 +26,5 @@ public class GameConfig
     public const string CHOPPING_BOARD_2 = "ChoppingBoard2";
     public const string PLATE_1 = "Plate1";
     public const string PLATE_2 = "Plate2";
+    public const string PLAYER  = "Player";
 }

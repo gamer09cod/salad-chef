@@ -34,6 +34,7 @@ public class GameManager : MonoBehaviour
     public List<Player> players = new List<Player>();
 
     public static Action<Player> OnPlayerTimeOver;
+
     public static GameManager Instance;
     #endregion
 

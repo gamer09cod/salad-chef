@@ -52,14 +52,14 @@ public class Player : Timer, IPlayerMechanics
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        //Player1 chopping board
+        //Chop Vegetable
         if ((other.gameObject.CompareTag(GameConfig.CHOPPING_BOARD_1) && playerID == 1) ||
             (other.gameObject.CompareTag(GameConfig.CHOPPING_BOARD_2) && playerID == 2))
         {
             ChopVegetable();
         }
 
-        //Player1 plate
+        //Put/remove an item from plate
         if ((other.gameObject.CompareTag(GameConfig.PLATE_1) && playerID == 1) ||
             (other.gameObject.CompareTag(GameConfig.PLATE_2) && playerID == 2))
         {
@@ -76,6 +76,15 @@ public class Player : Timer, IPlayerMechanics
         {
             int veg = int.Parse(other.gameObject.tag);
             AddVegetableToBag(veg);
+        }
+    }
+
+    public void PutVegetablesInTrash()
+    {
+        if (choppedVegetables.Length > 0)
+        {
+            OnOrderProcessed();//Reset Chopped items.
+            UpdateScore(-20);
         }
     }
 
