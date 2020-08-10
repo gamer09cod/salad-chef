@@ -40,7 +40,7 @@ public class Player : Timer, IPlayerMechanics
     public void InitPlayer()
     {
         ResetData();
-        playerMovement.CanMove = true;
+        playerMovement.canMove = true;
         StartTimer(GameConfig.GAME_TIME);
     }
 
@@ -99,14 +99,14 @@ public class Player : Timer, IPlayerMechanics
 
     IEnumerator Chopping(Vegetable v)
     {
-        playerMovement.CanMove = false;
+        playerMovement.canMove = false;
         playerUI.ShowStatusBar(v.chopTime, v.name);
 
         yield return new WaitForSeconds(v.chopTime);//Wait for vegetable to be chopped.
 
         RemoveChoppedVegetableFromBag();
         GameManager.Instance.ProcessOrder(orderSum, this);
-        playerMovement.CanMove = true;
+        playerMovement.canMove = true;
         yield return null;
     }
 

@@ -135,9 +135,15 @@ public class GameManager : MonoBehaviour
 
     void PlayerTimerOver(Player player)
     {
-        Debug.Log("---PlayerTimerOver---");
-        playerNameText.text = player.name + " " + player.playerID ;//Winner name
-        GameOver();
+        if(players[0].GetCurrentTick <=0 && players[1].GetCurrentTick <= 0)
+        {
+            if(players[0].score > players[1].score)           
+                playerNameText.text = players[0].name + " " + players[0].playerID;//Winner name
+            else
+                playerNameText.text = players[1].name + " " + players[1].playerID;//Winner name
+
+            GameOver();
+        }
     }
 
     void GameOver()

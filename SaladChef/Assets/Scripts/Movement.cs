@@ -10,9 +10,7 @@ public class Movement : MonoBehaviour
     public Vector2 movement;
 
     private Rigidbody2D rigidBody;
-    private bool canMove = true;
-
-    public bool CanMove { set { canMove = value; } }
+    public bool canMove = true;
 
     #region Animation
     private Animator animator;
