@@ -52,3 +52,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Shops
+    uniqueID: 23786647
+    locked: 0
+  - name: Player
+    uniqueID: 1997320567
+    locked: 0

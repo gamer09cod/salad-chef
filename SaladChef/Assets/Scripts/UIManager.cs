@@ -53,4 +53,14 @@ public class UIManager : MonoBehaviour
             }
         }
     }
+
+    public void ClearOrders()
+    {
+        foreach (OrderUIItem item in orderItems)
+        {
+            Destroy(item.gameObject);
+        }
+
+        orderItems.Clear();
+    }
 }

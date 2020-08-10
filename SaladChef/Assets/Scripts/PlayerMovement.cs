@@ -47,4 +47,12 @@ public class PlayerMovement : MonoBehaviour
         //Movement
         rigidBody.MovePosition(rigidBody.position + movement * moveSpeed * Time.fixedDeltaTime);
     }
+
+    public void StopPlayer()
+    {
+        movement.x = 0;
+        movement.y = 0;
+        canMove = false;
+        //rigidBody.MovePosition(new Vector2(0, 0));
+    }
 }

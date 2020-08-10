@@ -10,7 +10,7 @@ public class GameConfig
 
     public const int MAX_CARRYING_CAPACITY = 2;
 
-    public const float GAME_TIME = 300f;
+    public const float GAME_TIME = 120f;
 
     //Tags
     public const string A = "1";

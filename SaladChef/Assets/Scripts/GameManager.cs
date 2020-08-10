@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 /// <summary>
 /// Class to create orders and manage processed orders.
@@ -29,15 +31,22 @@ public class GameManager : MonoBehaviour
 
     public List<CustomerOrder> custOrders = new List<CustomerOrder>();
     public List<CustomerOrder> completedOrders = new List<CustomerOrder>();
+    public List<Player> players = new List<Player>();
+
+    public static Action<Player> OnPlayerTimeOver;
     public static GameManager Instance;
     #endregion
+
     #region PrivateMembers
     private List<int> vegetableIds = new List<int>()
     {
         1,2,4,8,16,32
     };
+    #endregion
 
-    private List<Player> players = new List<Player>();
+    #region ResultScreen
+    public GameObject resultScreen;
+    public TextMeshProUGUI playerNameText;
     #endregion
 
     private void Awake()
@@ -55,11 +64,13 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        OnPlayerTimeOver += PlayerTimerOver;
         InitGame();
     }
 
     void InitGame()
     {
+        UIManager.Instance.ClearOrders();
         CreateOrders();
     }
 
@@ -78,14 +89,17 @@ public class GameManager : MonoBehaviour
             for(int J = 0; J < GameConfig.MAX_VEGGIES_PER_ORDER; J++)
             {
                 //Get random vegetable
-                int key = vegetableIds[Random.Range(0, 6)];
+                int key = vegetableIds[UnityEngine.Random.Range(0, 6)];
 
                 order.requiredSum += key;
                 order.sequence += vegetableWeightMapping[key];
             }
 
             //Compute random completion time
-            order.time = Random.Range(60,71);
+            order.time = UnityEngine.Random.Range(120,150);
+
+            //Score
+            order.score = 100;
 
             //Bonus
             order.bonus = CustomerBonus.Score;
@@ -103,20 +117,15 @@ public class GameManager : MonoBehaviour
         if(order != null)
         {
             player.UpdateScore(order.score);//Give player some score points of that order.
-
             player.OnOrderProcessed();
-
             UIManager.Instance.UpdateOrder(order.requiredSum);//Update order UI.
-
             custOrders.Remove(order);//Remove order from available orders.
-
         }
     }
 
     void OnOrderProcessed(OrderUIItem ord)
     {
         CustomerOrder order = custOrders.Find(x=> x.sequence == ord.sequence.text);
-
         if (order != null) 
         {
             custOrders.Remove(order);
@@ -124,14 +133,42 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    void PlayerTimerOver(Player player)
+    {
+        Debug.Log("---PlayerTimerOver---");
+        playerNameText.text = player.name + " " + player.playerID ;//Winner name
+        GameOver();
+    }
+
+    void GameOver()
+    {
+        resultScreen.SetActive(true);
+    }
+
     public void RestartGame()
     {
+        foreach(Player p in players)
+        {
+            p.InitPlayer();
+        }
 
+        resultScreen.SetActive(false);
+
+        InitGame();
     }
 
     public void QuitGame()
     {
-        Application.Quit();
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+      Application.Quit();
+#endif
+    }
+
+    private void OnDisable()
+    {
+        OnPlayerTimeOver -= PlayerTimerOver;
     }
 }
 

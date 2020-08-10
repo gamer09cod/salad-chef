@@ -5,13 +5,14 @@ using UnityEngine;
 
 [RequireComponent(typeof(PlayerMovement))]
 [RequireComponent(typeof(PlayerUI))]
-public class Player : MonoBehaviour, IPlayerMechanics
+public class Player : Timer, IPlayerMechanics
 {
     public int playerID;
+
     public List<Vegetable> carryingVegetables = new List<Vegetable>();
     public List<Vegetable> vegetableOnPlate = new List<Vegetable>();
+
     public int score;//Current score of the player 
-    public int time;//Time left for the user
 
     //Player UI
     public PlayerUI playerUI;
@@ -32,6 +33,21 @@ public class Player : MonoBehaviour, IPlayerMechanics
     private void Start()
     {
         playerMovement = GetComponent<PlayerMovement>();
+        OnPlayerTimeOver += OnTimerOver;
+        InitPlayer();
+    }
+
+    public void InitPlayer()
+    {
+        ResetData();
+        playerMovement.CanMove = true;
+        StartTimer(GameConfig.GAME_TIME);
+    }
+
+    void OnTimerOver()
+    {
+        playerMovement.StopPlayer();
+        GameManager.OnPlayerTimeOver?.Invoke(this);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -42,13 +58,13 @@ public class Player : MonoBehaviour, IPlayerMechanics
             ChopVegetable();
         }
 
-        //Player2 chopping board
+        //Player1 plate
         if (other.gameObject.CompareTag(GameConfig.PLATE_1) && playerID == 1)
         {
             ExecutePlateProcess();
         }
 
-        //Player1 Plate
+        //Player2 Plate
         if (other.gameObject.CompareTag(GameConfig.PLATE_2) && playerID == 2)
         {
 
@@ -67,16 +83,22 @@ public class Player : MonoBehaviour, IPlayerMechanics
         }
     }
 
-    public void ChopVegetable()
+    void UpdateVegetablesInBag()
     {
-        if (carryingVegetables.Count > 0 && !isChopping)
+        carryingVegetables.RemoveAt(0);//Remove vegetable from bag.
+
+        if (vegetablesInBag.Length == 1)
         {
-            isChopping = true;
-
-            Vegetable vegetableToChop = carryingVegetables[0];
-
-            StartCoroutine(Chopping(vegetableToChop));
+            vegetablesInBag = "";
         }
+        else
+        {
+            string temp = vegetablesInBag;
+            temp = temp.Remove(0, 1);
+            vegetablesInBag = temp;
+        }
+
+        playerUI.UpdateBag(vegetablesInBag);
     }
 
     IEnumerator Chopping(Vegetable v)
@@ -95,7 +117,7 @@ public class Player : MonoBehaviour, IPlayerMechanics
     public void UpdateScore(int score)
     {
         this.score += score;
-        playerUI.UpdateScore(score);
+        playerUI.UpdateScore(this.score);
     }
 
     public void OnOrderProcessed()
@@ -105,6 +127,7 @@ public class Player : MonoBehaviour, IPlayerMechanics
         playerUI.UpdateChoppedVegetables(choppedVegetables);
     }
 
+    #region InterfaceMethods
     /// <summary>
     /// Adds a vegetable to bag after pick up or from plate.
     /// </summary>
@@ -134,22 +157,16 @@ public class Player : MonoBehaviour, IPlayerMechanics
         isChopping = false;//Set ischopping to false.
     }
 
-    void UpdateVegetablesInBag()
+    public void ChopVegetable()
     {
-        carryingVegetables.RemoveAt(0);//Remove vegetable from bag.
-
-        if (vegetablesInBag.Length == 1)
+        if (carryingVegetables.Count > 0 && !isChopping)
         {
-            vegetablesInBag = "";
-        }
-        else
-        {
-            string temp = vegetablesInBag;
-            temp = temp.Remove(0, 1);
-            vegetablesInBag = temp;
-        }
+            isChopping = true;
 
-        playerUI.UpdateBag(vegetablesInBag);
+            Vegetable vegetableToChop = carryingVegetables[0];
+
+            StartCoroutine(Chopping(vegetableToChop));
+        }
     }
 
     public void ExecutePlateProcess()
@@ -189,16 +206,21 @@ public class Player : MonoBehaviour, IPlayerMechanics
         vegetablesOnPlate = "";
         playerUI.UpdateVegetableOnPlate(vegetablesOnPlate);
     }
+    #endregion
 
     public void ResetData()
     {
         carryingVegetables.Clear();
         score = 0;
-        time = 0;
         vegetablesInBag = "";
         choppedVegetables = "";
         vegetablesOnPlate = "";
         isChopping = false;
         orderSum = 0;
+    }
+
+    void OnDisable()
+    {
+        OnPlayerTimeOver -= OnTimerOver;
     }
 }
