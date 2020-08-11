@@ -26,10 +26,8 @@ public class Player : Timer, IPlayerMechanics
 
     //Order
     private int orderSum;//Sum of weights of currently chopped vegetables.
-
     //Booleans
     private bool isChopping = false;
-
     private void Start()
     {
         playerMovement = GetComponent<Movement>();

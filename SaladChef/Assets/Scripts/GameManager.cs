@@ -145,11 +145,11 @@ public class GameManager : MonoBehaviour
         if(players[0].GetCurrentTick <= 0 && players[1].GetCurrentTick <= 0)
         {
             if (players[0].score > players[1].score)
-                playerNameText.text = players[0].name + " " + players[0].playerID;//Winner name
+                playerNameText.text = players[0].name + " " + players[0].playerID + " Wins!!";//Winner name
             else if (players[0].score == players[1].score)
                 playerNameText.text = "Its a draw!";
             else
-                playerNameText.text = players[1].name + " " + players[1].playerID;
+                playerNameText.text = players[1].name + " " + players[1].playerID + " Wins!!";
 
             GameOver();
         }
